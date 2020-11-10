@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
     public int score;
     public TextMeshProUGUI healthText;
     public int health;
+    public TextMeshProUGUI timeText;
+    private float time = 5;
+    public TextMeshProUGUI enemyText;
+    public TextMeshProUGUI hightscoreText;
     public TextMeshProUGUI gameOverText;
     public bool isGameActive;
     public Button restartButton;
@@ -21,16 +25,41 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
-        
+        // PlayerPrefs.SetInt("savedScore", 0);
+        // PlayerPrefs.SetInt("savedHealth", 100);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (score < 0 || health <= 0)
+       // Debug.Log(time);
+
+        if (isGameActive)
         {
-            GameOver();
+            if (score < 0 || health <= 0)
+            {
+                GameOver();
+            }
+
+            if (isGameActive)
+            {
+                if (time > 0)
+                {
+                    time = time - Time.deltaTime;
+                    timeText.text = "Time: " + Mathf.CeilToInt(time % 60);
+                }
+                else
+                {
+                    GameOver();
+                }
+            }
         }
+        int numOfEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        enemyText.text = "Enemies: " + numOfEnemies;
+
+        int highScore = PlayerPrefs.GetInt("highScore");
+        hightscoreText.text = "Hightscore: " + highScore;
+
     }
 
     public void UpdateScore(int scoreToAdd)
@@ -49,6 +78,15 @@ public class GameManager : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         isGameActive = false;
         restartButton.gameObject.SetActive(true);
+        // PlayerPrefs.SetInt("savedScore", score);
+        // PlayerPrefs.SetInt("savedHealth", health);
+        int oldHighScore = PlayerPrefs.GetInt("highScore");
+        // Debug.Log(oldHighScore);
+        if (score > oldHighScore)
+        {
+            PlayerPrefs.SetInt("highScore", score);
+        }
+
     }
 
     public void RestartGame()

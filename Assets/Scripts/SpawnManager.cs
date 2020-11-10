@@ -38,7 +38,7 @@ public class SpawnManager : MonoBehaviour
         
         while(gameManager.isGameActive)
         {
-            Debug.Log("Spawan an enemy!");
+            // Debug.Log("Spawan an enemy!");
             // Debug.Log(gameManager.isGameActive);
             
             yield return new WaitForSeconds(spawnRate);
