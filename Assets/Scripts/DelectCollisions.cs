@@ -28,13 +28,16 @@ public class DelectCollisions : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
+        if(other.CompareTag("Enemy"))
+        {
+            missileAudio.PlayOneShot(explosionSound, 1.0f);
+            gameManager.UpdateScore(5);
+            Instantiate(explosionPrefab, transform.position, explosionPrefab.transform.rotation);
+            //Destroy(gameObject);
+            Destroy(other.gameObject);
+            gameObject.transform.position = new Vector3(0, -10, 0);
+        }
         
-        missileAudio.PlayOneShot(explosionSound, 1.0f);
-        gameManager.UpdateScore(5);
-        Instantiate(explosionPrefab, transform.position, explosionPrefab.transform.rotation);
-        //Destroy(gameObject);
-        Destroy(other.gameObject);
-        gameObject.transform.position = new Vector3(0,-10,0);
 
 
     }
